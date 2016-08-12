@@ -1,7 +1,13 @@
-# react-komposer
+# hymn-composer
 
 Let's compose React containers and feed data into components. <br>
 (supports ReactNative as well)
+
+The base of this project stems from <a href="https://github.com/kadirahq/react-komposer">react-komposer</a>. It is not intended to be backwards-compatible, as it will introduce breaking updates & new features.
+
+## Differences from react-komposer
+
+* Few bugfixes
 
 ## TOC
 
@@ -34,7 +40,7 @@ There is another component layer on-top of these **Dumb Components** which handl
 
 If you want to do these yourself, you have to do a lot of **repetitive tasks**. This commonly leads to **human errors**.
 
-**Meet React Komposer**
+**Meet Hymn Composer**
 
 That's what we are going to fix with this project. You simply tell it how to get data and clean up resources, then it'll
 do the hard work for you. This is a universal project and works with **any kind of data source**, whether it's based on
@@ -43,7 +49,7 @@ Promises, Rx.JS observables, a Redux store or even Meteor's Tracker.
 ## Installation
 
 ```
-npm i --save react-komposer
+npm i --save hymn-composer
 ```
 
 ## Basic Usage
@@ -73,7 +79,7 @@ In the above function, we get new data every second and send it via the `onData`
 Okay. Now it's time to create the clock Container, wrapped around our Time UI Component, using our `onPropsChange` function:
 
 ```js
-import { compose } from 'react-komposer';
+import { compose } from 'hymn-composer';
 const Clock = compose(onPropsChange)(Time);
 ```
 
@@ -192,7 +198,7 @@ export default composeAll(
 
 ### Pure Containers
 
-`react-komposer` checks the purity of payload, error and props, avoiding unnecessary render function calls. That means
+`hymn-composer` checks the purity of payload, error and props, avoiding unnecessary render function calls. That means
 we've implemented the `shouldComponentUpdate` lifecycle method, which follows something similar to React's [shallowCompare](https://facebook.github.io/react/docs/shallow-compare.html).
 
 If you need to turn off this functionality, you can do it like this:
@@ -205,7 +211,7 @@ const Clock = compose(onPropsChange, null, null, {pure: false})(Time);
 
 ### Ref to base component
 
-In some situations, you need to get a ref to the base component that you pass to `react-komposer`. You can enable a `ref` with the `withRef` option:
+In some situations, you need to get a ref to the base component that you pass to `hymn-composer`. You can enable a `ref` with the `withRef` option:
 
 ```js
 // You can use `composeWithPromise` or any other compose APIs
@@ -226,7 +232,7 @@ Here's how do it:
 import {
   setDefaultErrorComponent,
   setDefaultLoadingComponent,
-} from 'react-komposer';
+} from 'hymn-composer';
 
 const ErrorComponent = () => (<div>My Error</div>);
 const LoadingComponent = () => (<div>My Loading</div>);
@@ -246,7 +252,7 @@ setDefaultLoadingComponent(LoadingComponent);
 For use with Promise-based data sources, you can use `composeWithPromise` instead of `compose`.
 
 ```js
-import {composeWithPromise} from 'react-komposer'
+import {composeWithPromise} from 'hymn-composer'
 
 // Create a component to display Time
 const Time = ({time}) => (<div>{time}</div>);
@@ -278,7 +284,7 @@ See this live: <https://jsfiddle.net/arunoda/8wgeLexy/>
 For use with Meteor, you need to use `composeWithTracker` instead of `compose`, from where you can watch any Reactive data.
 
 ```js
-import {composeWithTracker} from 'react-komposer';
+import {composeWithTracker} from 'hymn-composer';
 import PostList from '../components/post_list.jsx';
 
 function composer(props, onData) {
@@ -294,7 +300,7 @@ export default composeWithTracker(composer)(PostList);
 In addition to above, you can also return a cleanup function from the composer function. See the following example:
 
 ```js
-import {composeWithTracker} from 'react-komposer';
+import {composeWithTracker} from 'hymn-composer';
 import PostList from '../components/post_list.jsx';
 
 const composerFunction = (props, onData) => {
@@ -312,7 +318,7 @@ For more information, refer this article: [Using Meteor Data and React with Mete
 ### Using with Rx.js Observables
 
 ```js
-import {composeWithObservable} from 'react-komposer'
+import {composeWithObservable} from 'hymn-composer'
 
 // Create a component to display Time
 const Time = ({time}) => (<div>{time}</div>);
@@ -395,7 +401,7 @@ ReactDOM.render(<Clock />, document.getElementById('react'));
 
 ## Extending
 
-Containers built by React Komposer are still React components. This means that they can be extended in the same way
+Containers built by Hymn Composer are still React components. This means that they can be extended in the same way
 you would extend any other component. This is demonstrated in the following example:
 
 
@@ -422,7 +428,7 @@ Remember to call `super` when overriding methods already defined in the Containe
 
 ## Stubbing
 
-It's very important to stub Containers used with `react-komposer` when we are doing isolated UI testing (especially with
+It's very important to stub Containers used with `hymn-composer` when we are doing isolated UI testing (especially with
 [react-storybook](https://github.com/kadirahq/react-storybook)). Here's how you can stub composers:
 
 **First of all, this only works if you are using the `composeAll` utility function.**
@@ -430,7 +436,7 @@ It's very important to stub Containers used with `react-komposer` when we are do
 At the very beginning of your initial JS file, set the following code:
 
 ```js
-import { setStubbingMode } from 'react-komposer';
+import { setStubbingMode } from 'hymn-composer';
 setStubbingMode(true);
 ```
 
@@ -444,7 +450,7 @@ If you need, you can set a stub composer and pass data to the original component
 You can do this, before using the component which has the Container.
 
 ```js
-import { setComposerStub } from 'react-komposer';
+import { setComposerStub } from 'hymn-composer';
 import CommentList from '../comment_list';
 import CreateComment from '../../containers/create_comment';
 
@@ -480,4 +486,4 @@ functionality to detect component unmount on the server. So make sure to handle 
 **Composer re-run on any prop change**
 
 Right now, the composer function will run again for any prop change. We can fix this by watching props and deciding which
-prop has been changed. See [#4](https://github.com/kadirahq/react-komposer/issues/4).
+prop has been changed. See [#4](https://github.com/kadirahq/hymn-composer/issues/4).
